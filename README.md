@@ -1,4 +1,4 @@
-# EFFECTIVE JAVA 3 / E STUDY
+# EFFECTIVE JAVA 3/E STUDY
 
 <div style="margin: 0 auto">
     <table>
@@ -35,7 +35,7 @@
 
 #### 네이밍 규칙
 - md 파일 : item + 번호
-  - 예) item1.md, item2.md, item3.md ...
+  - 예) `item1.md`, `item2.md`, `item3.md` ...
 - 자바 클래스 파일 : 자유
 
 #### 경로 규칙
@@ -47,6 +47,8 @@
 
 # 예시
 /src/main/java/ka/chapter2/item1/item1.md
+/src/main/java/ka/chapter2/item2/item2.md
+/src/main/java/ka/chapter3/item11/item11.md
 ```
 
 #### 커밋 메시지 컨벤션
