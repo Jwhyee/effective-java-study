@@ -55,13 +55,13 @@
 
 ```bash
 # 파일 추가 시
-add : [item1] 생성자 대신 정적 팩터리 메서드를 고려하라.
+git commit -m "add : [item1] 생성자 대신 정적 팩터리 메서드를 고려하라."
 
 # 파일 수정 시
-refactor : [item1] 생성자 대신 정적 팩터리 메서드를 고려하라.
+git commit -m "refactor : [item1] 생성자 대신 정적 팩터리 메서드를 고려하라."
 
 # 파일 삭제 시
-remove : [item1] 생성자 대신 정적 팩터리 메서드를 고려하라.
+git commit -m "remove : [item1] 생성자 대신 정적 팩터리 메서드를 고려하라."
 ```
 
 ### [발표 방식]
