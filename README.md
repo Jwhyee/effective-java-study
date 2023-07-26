@@ -1,6 +1,6 @@
 # EFFECTIVE JAVA 3 / E STUDY
 
-<center>
+<div style="margin: 0 auto">
     <table>
         <thead>
             <tr>
@@ -19,7 +19,7 @@
             </tr>
         </tbody>
     </table>
-</center>
+</div>
 
 ### [스터디 진행 방식]
 
