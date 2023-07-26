@@ -1,23 +1,25 @@
 # EFFECTIVE JAVA 3 / E STUDY
 
-<table>
-    <thead>
-        <tr>
-            <th>가준영</th>
-            <th>박재은</th>
-            <th>석시윤</th>
-            <th>전현정</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td><img src="https://avatars.githubusercontent.com/u/82663161?v=4" width="160" height="160"/></td>
-            <td><img src="https://avatars.githubusercontent.com/u/82663161?v=4" width="160" height="160"/></td>
-            <td><img src="https://avatars.githubusercontent.com/u/73217387?v=4" width="160" height="160"/></td>
-            <td><img src="https://avatars.githubusercontent.com/u/120557874?v=4" width="160" height="160"/></td>
-        </tr>
-    </tbody>
-</table>
+<center>
+    <table>
+        <thead>
+            <tr>
+                <th><a href="https://github.com/Jwhyee">가준영</a></th>
+                <th><a href="https://github.com/Jwhyee">박재은</a></th>
+                <th><a href="https://github.com/seanee3670">석시윤</a></th>
+                <th><a href="https://github.com/jhj-sharon">전현정</a></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><img src="https://avatars.githubusercontent.com/u/82663161?v=4" width="150" height="150"/></td>
+                <td><img src="https://avatars.githubusercontent.com/u/82663161?v=4" width="150" height="150"/></td>
+                <td><img src="https://avatars.githubusercontent.com/u/73217387?v=4" width="150" height="150"/></td>
+                <td><img src="https://avatars.githubusercontent.com/u/120557874?v=4" width="150" height="150"/></td>
+            </tr>
+        </tbody>
+    </table>
+</center>
 
 ### [스터디 진행 방식]
 
