@@ -5,7 +5,7 @@
         <thead>
             <tr>
                 <th><a href="https://github.com/Jwhyee">가준영</a></th>
-                <th><a href="https://github.com/Jwhyee">박재은</a></th>
+                <th><a href="https://github.com/Jaeeun1083">박재은</a></th>
                 <th><a href="https://github.com/seanee3670">석시윤</a></th>
                 <th><a href="https://github.com/jhj-sharon">전현정</a></th>
             </tr>
@@ -13,7 +13,7 @@
         <tbody>
             <tr>
                 <td><img src="https://avatars.githubusercontent.com/u/82663161?v=4" width="150" height="150"/></td>
-                <td><img src="https://avatars.githubusercontent.com/u/82663161?v=4" width="150" height="150"/></td>
+                <td><img src="https://avatars.githubusercontent.com/u/78838791?v=4" width="150" height="150"/></td>
                 <td><img src="https://avatars.githubusercontent.com/u/73217387?v=4" width="150" height="150"/></td>
                 <td><img src="https://avatars.githubusercontent.com/u/120557874?v=4" width="150" height="150"/></td>
             </tr>
