@@ -21,6 +21,10 @@
     </table>
 </div>
 
+### [진행 현황]
+
+- [링크](https://github.com/Jwhyee/effective-java-study/blob/master/PROGRESS.md)
+
 ### [스터디 진행 방식]
 
 - 스터디는 매주 1회 진행합니다.
