@@ -2,6 +2,7 @@ package ka.chapter2.item3.util;
 
 import org.junit.jupiter.api.Test;
 
+import java.io.*;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.time.LocalDateTime;
@@ -85,5 +86,48 @@ public class UtilTest {
         System.out.println("time2 = " + time2);
 
         assertTrue(time1.equals(time2));
+    }
+
+    @Test
+    void serializeTest() {
+        // 직렬화할 파일 경로
+        String filePath = "dateTimeUtil.ser";
+
+        // 객체 생성
+        DateTimeUtil original = DateTimeUtil.getInstance();
+
+        // 객체를 파일에 직렬화
+        serializeToFile(original, filePath);
+
+        // 파일로부터 객체 역직렬화
+        DateTimeUtil deserialized = deserializeFromFile(filePath);
+
+        // 역직렬화된 객체 사용
+        String passedTime = deserialized.getPassedTime(LocalDateTime.now().minusMinutes(2));
+        System.out.println("passedTime = " + passedTime);
+
+        assertTrue(original == deserialized);
+    }
+
+    // 객체를 파일에 직렬화하는 메소드
+    private static void serializeToFile(Object object, String filePath) {
+        try (ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream(filePath))) {
+            outputStream.writeObject(object);
+            System.out.println("Object serialized to " + filePath);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    // 파일로부터 객체 역직렬화하는 메소드
+    private static DateTimeUtil deserializeFromFile(String filePath) {
+        try (ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream(filePath))) {
+            DateTimeUtil deserialized = (DateTimeUtil) inputStream.readObject();
+            System.out.println("Object deserialized from " + filePath);
+            return deserialized;
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }

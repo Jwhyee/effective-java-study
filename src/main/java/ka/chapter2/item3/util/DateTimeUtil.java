@@ -1,12 +1,13 @@
 package ka.chapter2.item3.util;
 
+import java.io.Serializable;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Supplier;
 
-public class DateTimeUtil {
+public class DateTimeUtil implements Serializable {
     private static final ThreadLocal<DateTimeUtil> threadLocalInstance = ThreadLocal.withInitial(() -> new DateTimeUtil());
 
     public static DateTimeUtil getInstance() {
@@ -58,5 +59,9 @@ public class DateTimeUtil {
 
     public static String getCurrentTime(LocalDateTime localDateTime) {
         return localDateTime.toString();
+    }
+
+    private Object readResolve() {
+        return getInstance();
     }
 }

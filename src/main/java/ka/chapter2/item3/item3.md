@@ -109,7 +109,7 @@ public class DateTimeUtil {
 ```
 
 위 코드와 같이 생성자를 `private`로 감추면, 다른 클래스에서 해당 객체를 생성할 수 없게 된다.
-즉, `DateTimeUtil.INSTANCE`를 통해서만 객체를 생성할 수 있으며,
+즉, `DateTimeUtil.INSTANCE`를 통해서만 객체를 생성할 수 있으며, 
 해당 객체는 `static final` 필드이기 때문에 딱 한 번만 생성이 된다.
 
 ```java
@@ -138,9 +138,28 @@ public class UtilTest {
 이러한 `Utility` 클래스는 여러 곳에서 사용하기 위해 만든 클래스이므로, 싱글톤으로 사용하기 유용하다.
 하지만, 메소드 쓰임에 따라 `item1`에서 공부한 정적 팩터리 방식으로 만드는 것이 더 유리할 수도 있다!
 
-#### 취약점
+### 2. 정적 팩터리 방식
 
-`Reflection`에서 제공하는 API를 통해 `private` 생성자를 가져올 수 있는 방법이 존재한다.
+`item1`에서 봤던 것과 같이 이번에는 정적 팩터리 방식으로 인스턴스를 가져오는 것이다.
+
+```java
+public class DateTimeUtil {
+    private static final DateTimeUtil INSTANCE = new DateTimeUtil();
+    private DateTimeUtil() { ... }
+    
+    public static DateTimeUtil getInstance() { return INSTANCE; }
+    
+    ...
+
+    public String getPassedTime(LocalDateTime localDateTime) {
+        ...
+    }
+}
+```
+
+#### 취약점 : Reflection
+
+1번, 2번 방식 모두 `Reflection`에서 제공하는 API를 통해 `private` 생성자를 가져올 수 있는 방법이 존재한다.
 
 > `Reflection`은 Class 객체를 통해 클래스의 정보를 가져오고,
 > 객체를 생성하거나 메소드를 호출하는 등의 작업을 할 수 있도록 지원하는 기능이다.
@@ -203,26 +222,10 @@ Constructor<DateTimeUtil> constructor = DateTimeUtil.class.getDeclaredConstructo
 DateTimeUtil util = constructor.newInstance();
 ```
 
-### 2. 정적 팩터리 방식
+#### 장점1. 스레드별 다른 인스턴스 생성 가능
 
-`item1`에서 봤던 것과 같이 이번에는 정적 팩터리 방식으로 인스턴스를 가져오는 것이다.
-
-```java
-public class DateTimeUtil {
-    private static final DateTimeUtil INSTANCE = new DateTimeUtil();
-    private DateTimeUtil() { ... }
-    
-    public static DateTimeUtil getInstance() { return INSTANCE; }
-    
-    ...
-
-    public String getPassedTime(LocalDateTime localDateTime) {
-        ...
-    }
-}
-```
-
-1번에서 봤던 방식과 크게 달라 보이는 점은 없지만, API를 바꾸지 않고도 싱글톤이 아니게 변경할 수 있다는 장점이 있다.
+1번에서 봤던 방식과 크게 달라 보이는 점은 없지만, 싱글톤이 아니게 변경할 수 있다는 장점이 있다.
+예를 들어, 유일한 인스턴스만을 반환하던 팩터리 메소드가, 호출하는 스레드별로 다른 인스턴스를 넘겨주게 만들 수 있다.
 
 ```java
 public class DateTimeUtil {
@@ -277,7 +280,7 @@ Instance 2: 1691418372058
 우리는 단일 스레드 환경에서 다른 객체가 생성되는 것을 방지하기 위해 방어 코드를 작성했지만,
 이와 같이 `ThreadLocal`을 사용하면 새로운 객체가 만들어져도 다른 스레드에서 작업하기 때문에 문제가 발생할 수 없다.
 
-#### 공급자 사용
+#### 장점2. 공급자로 사용 가능
 
 > 공급자란, 정적 팩터리 메소드를 `Supplier` 인터페이스에 대한 참조로 바꿔서 객체를 생성하는 것
 
@@ -321,20 +324,126 @@ public class UtilTest {
 }
 ```
 
-#### 클래스 직렬화
+### 클래스 직렬화
 
-> 직렬화란 객체를 Stream으로 변환하는 과정을 의미
+> 직렬화란, 객체를 바이트 스트림으로 변환하는 과정이다.<br>
+> 역직렬화란, 직렬화된 바이트 스트림을 다시 객체로 변환하는 과정이다.
 
-이해 못한 부분
-- 직렬화란 List처럼 여러 객체를 나열(?)하는 것으로 이해했는데, 싱글톤 객체를 굳이 직렬화하는 이유를 모르겠음
-- 싱글톤은 어차피 하나의 객체만을 사용하는 것이 목적인데, 굳이 직렬화를 사용해서 얻는 이점이 무엇인지?.? 
+`Serializable`을 구현한 `DateTimeUtil`을 예시로 확인해보자.
+
+```java
+public class DateTimeUtil implements Serializable {
+    private static final DateTimeUtil INSTANCE = new DateTimeUtil();
+
+    private DateTimeUtil() {}
+
+    public static DateTimeUtil getInstance() {
+        return INSTANCE;
+    }
+
+    public String getPassedTime(LocalDateTime localDateTime) {
+        ...
+    }
+    
+}
+```
+
+아래 코드는 프로젝트 최상위 경로에 `dateTimeUtil.ser`이라는 파일명으로 직렬화를 진행한뒤,
+직렬화된 파일을 다시 역직렬화해 객체로 반환하는 코드이다.
+
+```java
+public class UtilTest {
+    @Test
+    void serializeTest() {
+        // 직렬화할 파일 경로
+        String filePath = "dateTimeUtil.ser";
+
+        // 객체 생성
+        DateTimeUtil original = DateTimeUtil.getInstance();
+
+        // 객체를 파일에 직렬화
+        serializeToFile(original, filePath);
+
+        // 파일로부터 객체 역직렬화
+        DateTimeUtil deserialized = deserializeFromFile(filePath);
+
+        // 역직렬화된 객체 사용
+        String passedTime = deserialized.getPassedTime(LocalDateTime.now().minusMinutes(2));
+        System.out.println("passedTime = " + passedTime);
+
+        // 테스트 실패!
+        assertTrue(original == deserialized);
+    }
+
+    // 객체를 파일에 직렬화하는 메소드
+    private static void serializeToFile(Object object, String filePath) {
+        try (ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream(filePath))) {
+            outputStream.writeObject(object);
+            System.out.println("Object serialized to " + filePath);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    // 파일로부터 객체 역직렬화하는 메소드
+    private static DateTimeUtil deserializeFromFile(String filePath) {
+        try (ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream(filePath))) {
+            DateTimeUtil deserialized = (DateTimeUtil) inputStream.readObject();
+            System.out.println("Object deserialized from " + filePath);
+            return deserialized;
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+}
+```
+
+`original` 객체가 직렬화를 통해 `dateTimeUtil.ser`이라는 파일이 되었고,
+해당 파일을 역직렬화를 통해 `deserialized` 객체가 되었다.
+이 두 객체는 동일한 객체여야하지만, 서로 다른 객체라며 테스트를 실패한다.
+
+테스트를 실패하는 이유는 기본적으로 직렬화된 인스턴스를 역직렬화할 때, 새로운 인스턴스가 계속해서 만들어진다.
+역직렬화 시 객체가 새로 생성되는 것을 막고, 항상 동일한 인스턴스를 반환하여 싱글톤 패턴을 지키기 위해
+`readResolve()` 메소드를 사용한다. 
+
+```java
+public class DateTimeUtil implements Serializable {
+    
+    private static final DateTimeUtil INSTANCE = new DateTimeUtil();
+    
+    public static DateTimeUtil getInstance() {
+        return INSTANCE;
+    }
+
+    private Object readResolve() {
+        return getInstance();
+    }
+    
+}
+```
+
+#### 자바 직렬화 프로세스
+
+**직렬화(Serialization)**
+
+- 객체를 바이트 스트림으로 저장하기 위해 `writeObject()` 메소드를 사용해 직렬화함
+
+**역직렬화(Deserialization)**
+
+- 저장된 바이트 스트림을 `readObject()` 메소드를 통해 읽어오고, 객체로 복원해 역직렬화함
+
+**객체 커스터마이즈(readResolve)**
+
+- 복원될 객체 내부에 `readResolve()` 메소드가 있다면 역직렬화 시에 복원되는 객체를 커스터마이즈 할 수 있음
+
 
 ### 3. 열거 타입 방식의 싱글턴 방식
 
 #### 열거 타입이란?
 
 `enum`은 클래스와 같이 멤버 변수, 메소드 등을 정의할 수 있다.
-가장 다른 점은 접근 제어자나 `static` 키워드가 없어도 상수를 사용할 수 있다는 점이다.
+가장 다른 점은 접근 제어자나 `static`, `final` 키워드가 없어도 상수를 사용할 수 있다는 점이다.
 
 ```java
 public enum DayOfWeek {
