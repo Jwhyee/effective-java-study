@@ -55,12 +55,35 @@ public class UtilTest {
     }
 
     @Test
-    void utilSupplierTest() {
+    void utilSupplierTest1() {
         Supplier<DateTimeUtil> dateTimeUtilSupplier = DateTimeUtil.getDateTimeUtilSupplier();
 
         DateTimeUtil dateTimeUtil1 = dateTimeUtilSupplier.get();
         DateTimeUtil dateTimeUtil2 = dateTimeUtilSupplier.get();
 
         assertTrue(dateTimeUtil1 == dateTimeUtil2);
+    }
+
+    @Test
+    void utilSupplierTest2() {
+        Supplier<String> dateTimeUtilSupplier = () -> DateTimeUtil.getCurrentTime(LocalDateTime.now());
+
+        String time1 = dateTimeUtilSupplier.get();
+        System.out.println("time1 = " + time1);
+        String time2 = dateTimeUtilSupplier.get();
+        System.out.println("time2 = " + time2);
+
+        assertTrue(time1.equals(time2));
+    }
+
+    @Test
+    void compareTimeTest() {
+        LocalDateTime dateTime = LocalDateTime.now();
+        String time1 = dateTime.toString();
+        System.out.println("time1 = " + time1);
+        String time2 = dateTime.toString();
+        System.out.println("time2 = " + time2);
+
+        assertTrue(time1.equals(time2));
     }
 }

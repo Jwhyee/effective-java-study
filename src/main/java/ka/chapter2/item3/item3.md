@@ -279,9 +279,6 @@ Instance 2: 1691418372058
 
 #### 공급자 사용
 
-이해 못한 부분 : 공급자를 사용해서 꺼내오는 객체는 모두 싱글톤이라 동일한 객체인데,
-왜 굳이 공급자를 사용해서 여러 객체를 사용하는 것인지?
-
 > 공급자란, 정적 팩터리 메소드를 `Supplier` 인터페이스에 대한 참조로 바꿔서 객체를 생성하는 것
 
 ```java
@@ -290,19 +287,36 @@ public class DateTimeUtil {
     public static Supplier<DateTimeUtil> getDateTimeUtilSupplier() {
         return DateTimeUtil::getInstance;
     }
+
+    public static String getCurrentTime(LocalDateTime localDateTime) {
+        return localDateTime.toString();
+    }
 }
 ```
 
 ```java
 public class UtilTest {
     @Test
-    void utilSupplierTest() {
+    void utilSupplierTest1() {
         Supplier<DateTimeUtil> dateTimeUtilSupplier = DateTimeUtil.getDateTimeUtilSupplier();
 
         DateTimeUtil dateTimeUtil1 = dateTimeUtilSupplier.get();
         DateTimeUtil dateTimeUtil2 = dateTimeUtilSupplier.get();
 
         assertTrue(dateTimeUtil1 == dateTimeUtil2);
+    }
+
+    @Test
+    void utilSupplierTest2() {
+        Supplier<String> dateTimeUtilSupplier = 
+                () -> DateTimeUtil.getCurrentTime(LocalDateTime.now());
+
+        String time1 = dateTimeUtilSupplier.get();
+        System.out.println("time1 = " + time1);
+        String time2 = dateTimeUtilSupplier.get();
+        System.out.println("time2 = " + time2);
+
+        assertTrue(time1.equals(time2));
     }
 }
 ```

@@ -55,4 +55,8 @@ public class DateTimeUtil {
     public static Supplier<DateTimeUtil> getDateTimeUtilSupplier() {
         return DateTimeUtil::getInstance;
     }
+
+    public static String getCurrentTime(LocalDateTime localDateTime) {
+        return localDateTime.toString();
+    }
 }
