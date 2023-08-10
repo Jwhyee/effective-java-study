@@ -59,55 +59,88 @@ public class UtilTest {
 
 > 소프트웨어의 엔티티(클래스, 모듈 등)는 확장에는 열려 있어야하고, 수정에는 닫혀 있어야 한다.
 
-즉, 새로운 기능이 추가될 때, 기존 코드는 수정되면 안 되며, 
-기존 코드를 변경하지 않고도 새로운 기능을 추가할 수 있어야 한다.
-
-- **어떤 기능을 구현할지에 대한 인터페이스 생성**
+아래 코드를 보면, 정수에 대한 더하기와 빼기에 대한 기능이 정적 메소드로 담겨있다.
+만약, 곱하고, 나누는 기능을 추가하려면 `MathUtil` 클래스 자체를 수정해야한다.
 
 ```java
-public interface DateTimeProvider {
-    String getPassedTime(LocalDateTime localDateTime);
+public class IntegerMathUtil {
+    public static int add(int a, int b) {
+        return a + b;
+    }
+
+    public static int subtract(int a, int b) {
+        return a - b;
+    }
 }
 ```
 
-- **인터페이스를 구현할 구현체 클래스 생성**
+OCP 원칙을 지키려면 아래와 같이 구분지어 사용해야한다.
 
 ```java
-public class DateTimeProviderImpl implements DateTimeProvider {
+public interface Operation {
+    int operate(int a, int b);
+}
+```
+
+```java
+public class AddOperation implements Operation {
     @Override
-    public String getPassedTime(LocalDateTime localDateTime) {
-        ...
+    public int operate(int a, int b) {
+        return a + b;
     }
 }
 ```
 
-- **싱글톤 패턴을 적용한 팩토리 클래스 생성**
-
 ```java
-public class DateTimeProviderFactory {
-    private static final DateTimeProvider INSTANCE = new DateTimeProviderImpl();
-
-    public static DateTimeProvider getInstance() {
-        return INSTANCE;
-    } 
+public class SubtractOperation implements Operation {
+    @Override
+    public int operate(int a, int b) {
+        return a - b;
+    }
 }
 ```
 
-이와 같이 정적 팩터리와 싱글톤을 사용하여 개방-폐쇄 원칙을 지키는 구조를 만들 수 있다.
+```java
+public class MultipleOperation implements Operation {
+    @Override
+    public int operate(int a, int b) {
+        return a * b;
+    }
+}
+```
+
+위와 같이 연산에 대한 `interface`를 생성하고,
+어떤 연산(덧셈, 뺄셈, 곱셈 등)을 할지에 대한 구현체들을 만들어주면 기능을 쉽게 확장할 수 있다.
 
 ```java
-public class FactoryTest {
+public class IntegerMathUtil {
+    public static int operate(int a, int b, Operation operation) {
+        return operation.operate(a, b);
+    }
+}
+```
+
+```java
+public class OperationTest {
     @Test
-    @DisplayName("싱글톤 정적 팩토리 테스트")
-    void factoryTest1() {
-        DateTimeProvider factory = DateTimeProviderFactory.getInstance();
-        String passedTime = factory.getPassedTime(LocalDateTime.now());
-        System.out.println(passedTime);
-        // 테스트 통과
-        assertTrue(passedTime.equals("0초 전"));
+    void addTest() {
+        int result = IntegerMathUtil.operate(10, 20, new AddOperation());
+        assertTrue(result == 30);
+    }
+
+    @Test
+    void subtractTest() {
+        int result = IntegerMathUtil.operate(10, 20, new SubtractOperation());
+        assertTrue(result == -10);
     }
 }
 ```
+
+마지막으로 `MathUtil`을 통해 클라이언트 코드에서
+연산할 숫자와 어떤 연산을 할 것인지에 대한 구현체를 넣어주면 완성이다.
+
+이를 통해 새로운 연산을 추가할 때,
+클래스를 수정하지 않고도, 새로운 `Operation` 구현체를 생성하여 확장할 수 있다.
 
 ## 언제 사용할까?
 
