@@ -425,17 +425,17 @@ public class DateTimeUtil implements Serializable {
 
 #### 자바 직렬화 프로세스
 
-- **직렬화(Serialization)**
+**직렬화(Serialization)**
 
-객체를 바이트 스트림으로 저장하기 위해 `writeObject()` 메소드를 사용해 직렬화함
+- 객체를 바이트 스트림으로 저장하기 위해 `writeObject()` 메소드를 사용해 직렬화함
 
-- **역직렬화(Deserialization)**
+**역직렬화(Deserialization)**
 
-저장된 바이트 스트림을 `readObject()` 메소드를 통해 읽어오고, 객체로 복원해 역직렬화함
+- 저장된 바이트 스트림을 `readObject()` 메소드를 통해 읽어오고, 객체로 복원해 역직렬화함
 
-- **객체 커스터마이즈(readResolve)**
+**객체 커스터마이즈(readResolve)**
 
-복원될 객체 내부에 `readResolve()` 메소드가 있다면 역직렬화 시에 복원되는 객체를 커스터마이즈 할 수 있음
+- 복원될 객체 내부에 `readResolve()` 메소드가 있다면 역직렬화 시에 복원되는 객체를 커스터마이즈 할 수 있음
 
 
 ### 3. 열거 타입 방식의 싱글턴 방식
@@ -443,7 +443,7 @@ public class DateTimeUtil implements Serializable {
 #### 열거 타입이란?
 
 `enum`은 클래스와 같이 멤버 변수, 메소드 등을 정의할 수 있다.
-가장 다른 점은 접근 제어자나 `static` 키워드가 없어도 상수를 사용할 수 있다는 점이다.
+가장 다른 점은 접근 제어자나 `static`, `final` 키워드가 없어도 상수를 사용할 수 있다는 점이다.
 
 ```java
 public enum DayOfWeek {
