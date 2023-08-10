@@ -109,7 +109,7 @@ public class DateTimeUtil {
 ```
 
 위 코드와 같이 생성자를 `private`로 감추면, 다른 클래스에서 해당 객체를 생성할 수 없게 된다.
-즉, `DateTimeUtil.INSTANCE`를 통해서만 객체를 생성할 수 있으며,
+즉, `DateTimeUtil.INSTANCE`를 통해서만 객체를 생성할 수 있으며, 
 해당 객체는 `static final` 필드이기 때문에 딱 한 번만 생성이 된다.
 
 ```java
@@ -138,9 +138,28 @@ public class UtilTest {
 이러한 `Utility` 클래스는 여러 곳에서 사용하기 위해 만든 클래스이므로, 싱글톤으로 사용하기 유용하다.
 하지만, 메소드 쓰임에 따라 `item1`에서 공부한 정적 팩터리 방식으로 만드는 것이 더 유리할 수도 있다!
 
-#### 취약점
+### 2. 정적 팩터리 방식
 
-`Reflection`에서 제공하는 API를 통해 `private` 생성자를 가져올 수 있는 방법이 존재한다.
+`item1`에서 봤던 것과 같이 이번에는 정적 팩터리 방식으로 인스턴스를 가져오는 것이다.
+
+```java
+public class DateTimeUtil {
+    private static final DateTimeUtil INSTANCE = new DateTimeUtil();
+    private DateTimeUtil() { ... }
+    
+    public static DateTimeUtil getInstance() { return INSTANCE; }
+    
+    ...
+
+    public String getPassedTime(LocalDateTime localDateTime) {
+        ...
+    }
+}
+```
+
+#### 취약점 : Reflection
+
+1번, 2번 방식 모두 `Reflection`에서 제공하는 API를 통해 `private` 생성자를 가져올 수 있는 방법이 존재한다.
 
 > `Reflection`은 Class 객체를 통해 클래스의 정보를 가져오고,
 > 객체를 생성하거나 메소드를 호출하는 등의 작업을 할 수 있도록 지원하는 기능이다.
@@ -201,25 +220,6 @@ Constructor<DateTimeUtil> constructor = DateTimeUtil.class.getDeclaredConstructo
 // 이미 위에서 클래스가 로딩되어 instanceCreated가 true인 상태
 // 때문에 IllegalStateException 발생!
 DateTimeUtil util = constructor.newInstance();
-```
-
-### 2. 정적 팩터리 방식
-
-`item1`에서 봤던 것과 같이 이번에는 정적 팩터리 방식으로 인스턴스를 가져오는 것이다.
-
-```java
-public class DateTimeUtil {
-    private static final DateTimeUtil INSTANCE = new DateTimeUtil();
-    private DateTimeUtil() { ... }
-    
-    public static DateTimeUtil getInstance() { return INSTANCE; }
-    
-    ...
-
-    public String getPassedTime(LocalDateTime localDateTime) {
-        ...
-    }
-}
 ```
 
 #### 장점1. 스레드별 다른 인스턴스 생성 가능
