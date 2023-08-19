@@ -315,66 +315,11 @@ public class CacheTest {
 캐시를 만들어서 사용할 때, 엔트리의 유효 기간을 정확히 정의하기 어렵다.
 때문에 시간이 지날수록 엔트리의 가치를 떨어뜨리는 방식을 흔히 사용한다.
 
-`ScheduledThreadPollExecutor`와 같은 백그라운드 스레드를 활용하거나, 캐시에 새 엔트리를 추가할 때,
+`ScheduledThreadPoolExecutor`와 같은 백그라운드 스레드를 활용하거나, 캐시에 새 엔트리를 추가할 때,
 부수 작업으로 수행하는 방법이 있다.
 
 `LinkedHashMap`으로 구현한 `LRU Cache`는 `removeEldestEntry()` 메소드를 이용한다.
 이 방식은 새 엔트리를 추가할 때, 캐시의 크기를 넘으면, 자동으로 가장 오래전에 사용한 엔트리를 제거한다.
-
-### 리스너 혹은 콜백의 메모리 누수
-
-```java
-public interface CallBack {
-    void onEvent(String msg);
-}
-```
-
-```java
-public class Client {
-    private WeakReference<CallBack> callBackRef;
-
-    public void registerCallback(CallBack callBack) {
-        callBackRef = new WeakReference<>(callBack);
-    }
-
-    public void performTask() {
-        if (callBackRef != null && callBackRef.get() != null) {
-            CallBack callBack = callBackRef.get();
-            callBack.onEvent("Task complete");
-        } else {
-            System.out.println("Callback not available");
-        }
-    }
-}
-```
-
-```java
-public class CallBackTest {
-    @Test
-    void callBackTest() {
-        Client client = new Client();
-
-        // 콜백 등록
-        client.registerCallback(message -> System.out.println("Received: " + message));
-
-        // 콜백을 약한 참조로 저장하여 메모리 누수 방지
-        client.performTask();
-
-        // 가비지 컬렉션 시도
-        System.gc();
-
-        // 콜백이 수거되어 호출되지 않음
-        client.performTask();
-    }
-}
-```
-
-보통 콜백을 사용하면 명확히 해지하지 않지만,
-위 코드와 같이 약한 참조(Weak Reference)로 저장하면,
-GC가 바로 수거해가는 것을 알 수 있다.
-
-> `Weak Reference<>`는 약한 참조로 참조되는 객체가 더 이상 강한 참조가 없을 경우, GC가 수거해간다.
-> 즉, 콜백 같은 경우 한 번 사용한 뒤, 재사용할 수 없기 때문에 GC에서 바로 수거해갈 수 있게 되는 것이다.
 
 ## 정리
 
