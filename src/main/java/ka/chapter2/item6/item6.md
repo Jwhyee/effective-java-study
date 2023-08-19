@@ -398,7 +398,7 @@ public class BoxingTest {
 timeMillis = 689.634083ms
 ```
 
-이렇게 박싱된 기본 타입보다는 기본(primitive) 타입을 사용하고,
+이렇게 박싱 타입보다는 기본(primitive) 타입을 사용하고,
 의도치 않은 오토박싱이 숨어들지 않도록 주의하자!
 
 ## 정리
