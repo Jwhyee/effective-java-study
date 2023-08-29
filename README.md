@@ -8,13 +8,17 @@
                   <th><a href="https://github.com/Jwhyee">가준영</a></th>
                   <th><a href="https://github.com/Jaeeun1083">박재은</a></th>
                   <th><a href="https://github.com/seanee3670">석시윤</a></th>
+                  <th><a href="https://github.com/gs97ahn">안검성</a></th>
+                  <th><a href="https://github.com/jiyoung0340">오지영</a></th>
               </tr>
           </thead>
           <tbody>
               <tr>
-                  <td><img src="https://avatars.githubusercontent.com/u/82663161?v=4" width="200" height="200"/></td>
-                  <td><img src="https://avatars.githubusercontent.com/u/78838791?v=4" width="200" height="200"/></td>
-                  <td><img src="https://avatars.githubusercontent.com/u/73217387?v=4" width="200" height="200"/></td>
+                  <td><img src="https://avatars.githubusercontent.com/u/82663161?v=4" width="120" height="120"/></td>
+                  <td><img src="https://avatars.githubusercontent.com/u/78838791?v=4" width="120" height="120"/></td>
+                  <td><img src="https://avatars.githubusercontent.com/u/73217387?v=4" width="120" height="120"/></td>
+                  <td><img src="https://avatars.githubusercontent.com/u/84578465?v=4" width="120" height="120"/></td>
+                  <td><img src="https://avatars.githubusercontent.com/u/124500993?v=4" width="120" height="120"/></td>
               </tr>
           </tbody>
       </table>
