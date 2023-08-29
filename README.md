@@ -14,11 +14,11 @@
           </thead>
           <tbody>
               <tr>
-                  <td><img src="https://avatars.githubusercontent.com/u/82663161?v=4" width="200" height="200"/></td>
-                  <td><img src="https://avatars.githubusercontent.com/u/78838791?v=4" width="200" height="200"/></td>
-                  <td><img src="https://avatars.githubusercontent.com/u/73217387?v=4" width="200" height="200"/></td>
-                  <td><img src="https://avatars.githubusercontent.com/u/84578465?v=4" width="200" height="200"/></td>
-                  <td><img src="https://avatars.githubusercontent.com/u/124500993?v=4" width="200" height="200"/></td>
+                  <td><img src="https://avatars.githubusercontent.com/u/82663161?v=4" width="120" height="120"/></td>
+                  <td><img src="https://avatars.githubusercontent.com/u/78838791?v=4" width="120" height="120"/></td>
+                  <td><img src="https://avatars.githubusercontent.com/u/73217387?v=4" width="120" height="120"/></td>
+                  <td><img src="https://avatars.githubusercontent.com/u/84578465?v=4" width="120" height="120"/></td>
+                  <td><img src="https://avatars.githubusercontent.com/u/124500993?v=4" width="120" height="120"/></td>
               </tr>
           </tbody>
       </table>
