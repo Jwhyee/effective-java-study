@@ -12,11 +12,8 @@ public class ColorPoint extends Point {
 
     @Override
     public boolean equals(Object o) {
-
         if(!(o instanceof Point)) return false;
         if(!(o instanceof ColorPoint)) return o.equals(this);
-
-        System.out.println("asdf");
 
         return super.equals(o) && ((ColorPoint) o).color == color;
     }

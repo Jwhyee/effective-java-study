@@ -125,8 +125,35 @@ public class Message {
 }
 ```
 
-여기에서 가장 큰 문제점은 들어온 객체를 `String`과도 비교하는 것이다.
-`Message.equals(String)`을 했을 때는 `true`를 반환하겠지만,
+```java
+public class MessageTest {
+    @Test
+    void msgEqStrTest() {
+        Message msg = new Message("Hello");
+        String str = "hello";
+
+        // 테스트 성공!
+        assertTrue(msg.equals(str));
+    }
+}
+```
+
+`str`과 `msg`가 같고 있는 문자열은 동일하기 때문에 테스트를 성공하는 모습을 볼 수 있다.
+그렇다면, 반대의 경우는 어떨까?
+
+```java
+public class MessageTest {
+    @Test
+    void strEqMsgTest() {
+        Message msg = new Message("Hello");
+        String str = "hello";
+
+        // 테스트 실패!
+        assertTrue(str.equals(msg));
+    }
+}
+```
+
 `String.equals(Message)`는 당연히 `false`가 나오게 된다.
 
 **이렇게 `equals` 규약을 어기면 그 객체를 사용하는 다른 객체들이 어떻게 반응할지 알 수 없다.**
@@ -353,6 +380,8 @@ public class ColorTest {
 > 따라서 그 타입의 모든 메소드가 하위 타입에서도 똑같이 잘 작동해야 한다.
 > > **서브 타입은 언제나 기반 타입으로 교체할 수 있어야 한다.**
 
+<!--
+
 ```java
 public class Animal {
     int speed = 100;
@@ -407,6 +436,8 @@ class Fish extends Animal {
 
 LSP 원칙의 핵심은 상속이며, 기반 클래스와 서브 클래스 사이에 IS-A 관계가 있을 경우로만 제한 되어야 한다.
 
+-->
+
 ### 일관성(consistency)
 
 > `null`이 아닌 모든 참조 값 x, y에 대해, x.equals(y)를 반복해서 호출하면 **true**이거나 **false**를 반환한다.
@@ -432,9 +463,43 @@ public final class URL {
 public abstract class URLStreamHandler {
     protected boolean equals(URL u1, URL u2) {
         // 두 객체의 레퍼런스가 동일하고,
-        // sameFile을 통해 프로토콜, 파일, 포트, 호스트가 모두 동일한지 확인하고,
+        // sameFile을 통해 프로토콜, 파일, 포트가 모두 동일한지 확인하고,
         // 마지막으로 hostsEqual를 통해 두 URL의 아이피 주소를 비교한다.
         return Objects.equals(u1.getRef(), u2.getRef()) && sameFile(u1, u2);
+    }
+}
+```
+
+```java
+public abstract class URLStreamHandler {
+    protected boolean sameFile(URL u1, URL u2) {
+        // Compare the protocols.
+        if (...) return false;
+
+        // Compare the files.
+        if (...) return false;
+
+        // Compare the ports.
+        if (...) return false;
+
+        // Compare the hosts.
+        if (!hostsEqual(u1, u2))
+            return false;
+
+        return true;
+    }
+
+    protected boolean hostsEqual(URL u1, URL u2) {
+        InetAddress a1 = getHostAddress(u1);
+        InetAddress a2 = getHostAddress(u2);
+        // if we have internet address for both, compare them
+        if (a1 != null && a2 != null) {
+            return a1.equals(a2);
+            // else, if both have host names, compare them
+        } else if (u1.getHost() != null && u2.getHost() != null)
+            return u1.getHost().equalsIgnoreCase(u2.getHost());
+        else
+            return u1.getHost() == null && u2.getHost() == null;
     }
 }
 ```
@@ -467,6 +532,7 @@ public class URLTest {
     void urlTest() {
         String urlStr1 = "https://www.naver.com";
         String urlStr2 = "https://223.130.200.107";
+        String urlStr3 = "https://223.130.200.104";
 
         try {
             URL url1 = new URL(urlStr1);
@@ -483,6 +549,10 @@ public class URLTest {
 
             // 테스트 성공!
             assertTrue(url1.equals(url2));
+
+            // 테스트 실패!
+            URL url3 = new URL(urlStr3);
+            assertTrue(url1.equals(url3));
 
         } catch (MalformedURLException | UnknownHostException e) {
             e.printStackTrace();
@@ -599,7 +669,7 @@ public class TransientTest {
 
 > `null`이 아닌 모든 참조 값 x에 대해, x.equals(null)은 `false`다.
 
-모든 객체가 null과 같지 않아야 한다는 것이다.
+모든 객체가 `null`과 같지 않아야 한다는 것이다.
 
 ```java
 public class NullTest {
@@ -607,6 +677,8 @@ public class NullTest {
     @Test
     void objectArrayNullTest() {
         Post[] arr = new Post[5];
+        
+        // 테스트 실패!
         assertTrue(arr[0].equals(null));
     }
     

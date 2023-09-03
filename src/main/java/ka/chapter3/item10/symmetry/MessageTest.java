@@ -9,11 +9,19 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class MessageTest {
     @Test
-    void msgTest() {
+    void strEqMsgTest() {
         Message msg = new Message("Hello");
         String str = "hello";
 
         assertTrue(msg.equals(str));
+    }
+
+    @Test
+    void msgEqStrTest() {
+        Message msg = new Message("Hello");
+        String str = "hello";
+
+        assertTrue(str.equals(msg));
     }
 
     @Test

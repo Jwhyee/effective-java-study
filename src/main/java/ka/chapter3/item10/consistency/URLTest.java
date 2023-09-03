@@ -15,6 +15,7 @@ public class URLTest {
     void urlTest() {
         String urlStr1 = "https://www.naver.com";
         String urlStr2 = "https://223.130.200.107";
+        String urlStr3 = "https://223.130.200.104";
 
         try {
             URL url1 = new URL(urlStr1);
@@ -28,6 +29,10 @@ public class URLTest {
 
             // 테스트 성공!
             assertTrue(url1.equals(url2));
+
+            // 테스트 실패!
+            URL url3 = new URL(urlStr3);
+            assertTrue(url1.equals(url3));
 
         } catch (MalformedURLException | UnknownHostException e) {
             e.printStackTrace();
