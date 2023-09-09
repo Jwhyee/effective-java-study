@@ -5,7 +5,78 @@
 > `equals`와 `hashCode`는 함께 재정의해라.
 
 만약 이를 어길 경우, `hashCode` 일반 규약을 어기게 되며,
-`HashMap`, `HashSet`과 같이 `key` 값을 주소값 기준으로 사용하는 컬렉션의 원소로 사용할 때, 문제를 일으킬 것이다.
+`HashMap`, `HashSet`과 같이 `key`의 `HashCode`를 기준으로 사용하는 컬렉션의 원소로 사용할 때, 문제를 일으킬 것이다.
+
+## HashCode와 주소값
+
+C언어 계열에서는 `pointer`를 통해서 특정 값의 실제 메모리 주소를 반환한다.
+하지만 자바에서 객체의 값을 출력하면 아래와 같이 나온다.
+
+```java
+// 출력 : ka.chapter3.item11.phone.Contact@51114e
+System.out.println(contact);
+```
+
+가장 뒤에 나오는 `51114e`라는 `hash` 값은 실제 주소값과 관련이 있을까?
+
+### C Lang
+
+C언어 계열은 `*p`, `malloc`, `free` 등과 같은 메소드를 활용한다.
+
+```cpp
+#include <stdio.h>
+
+int main() {
+    int x = 42;
+
+    printf("x 주소값: %p\n", (void *)&x);
+
+    return 0;
+}
+```
+
+즉, 메모리를 직접 관리하기 때문에, 객체의 실제 메모리 주소를 직접 얻을 수 있다.
+
+### Java
+
+`Java`에서 객체의 값을 출력하면 다음과 같이 나온다.
+
+```java
+import org.openjdk.jol.vm.VM;
+
+public class HashTest {
+    
+  @Test
+  void postHashTest() {
+    Post p = new Post(1);
+
+    System.out.println("hashCode : " + p.hashCode());
+    System.out.println("identity : " + System.identityHashCode(p));
+
+    System.out.println("VM hash : " + VM.current().addressOf(p));
+  }
+
+}
+```
+
+```bash
+hashCode : 1434041222
+identity : 1434041222
+```
+
+하지만 `OpenJDK`의 `Java Object Layout (JOL)` 라이브러리를 사용하면 아래와 같은 값이 나온다.
+
+```bash
+VM hash : 30320045384
+```
+
+이마저도 실제 메모리 주소를 [압축한 값](https://shipilev.net/jvm/anatomy-quarks/23-compressed-references/#_compressed_references)일 수 있기 때문에 실제로 사용하지 않는 것이 좋다.
+
+이와 같이 `Java`와 같은 경우에는 메모리 관리를 사용자가 하는 것이 아닌 `GC`가 직접 처리한다.
+때문에 `hashCode`를 이용해 실제 객체 메모리 값을 추상화하고, 압축한다.
+
+C언어는 실제 메모리를 사용하기 때문에 안전성이 낮지만,
+`Java`의 경우 직접적인 메모리를 노출시키지 않아, 안전성을 높일 수 있다.
 
 ## hashCode의 일반 규약
 
@@ -31,8 +102,8 @@ public class Object {
 
 이를 그대로 번역하면 아래와 걑다.
 
-- equals 비교에 사용되는 정보가 변경되지 않았다면,
-애플리케이션이 실행되는 동안 그 객체의 hashCode 메소드는 몇 번을 호출해도 일관되게 항상 같은 값을 반환해야 한다.
+- `equals` 비교에 사용되는 정보가 변경되지 않았다면,
+애플리케이션이 실행되는 동안 그 객체의 `hashCode` 메소드는 몇 번을 호출해도 일관되게 항상 같은 값을 반환해야 한다.
 단, 애플리케이션을 다시 실행한다면, 이 값이 달라져도 상관없다.
 
 - `equals(Object)`가 두 객체를 같다고 판단했다면, 두 객체의 `hashCode`는 똑같은 값을 반환해야 한다.
@@ -42,7 +113,7 @@ public class Object {
 
 여기서 가장 주의해야할 것은 두 번째 조항인, 논리적으로 같은 객체는 같은 해시코드를 반환해야한다는 것이다.
 
-아래는 전화 번호와 이름을 저장하는 `Contact` 클래스가 있다.
+코드를 통해 확인해보자!
 
 ```java
 public class Contact {
@@ -89,7 +160,26 @@ java.lang.NullPointerException: Cannot invoke "String.equals(Object)" because th
 ```
 
 `sendMessageMap.put`와 `sendMessageMap.get`에서 각각 사용한 `Contact` 객체는 서로 다른 인스턴스이다.
-때문에 각자의 주소값이 다르기 때문에 `map`에서 검색할 때, `NPE`가 발생한 것이다.
+
+아래와 같이 `get`을 하는 과정에서 보면 `equals`를 사용하는 것을 볼 수 있다.
+
+```java
+public class HashMap { 
+    public V get(Object key) {
+        Node<K,V> e;
+        return (e = getNode(key)) == null ? null : e.value;
+    }
+    
+    final Node<K,V> getNode(Object key) {
+        if (first.hash == hash && ((k = first.key) == key || (key != null && key.equals(k))))
+            ...
+        if (e.hash == hash && ((k = e.key) == key || (key != null && key.equals(k))))
+            ...
+    }
+}
+```
+
+때문에 각자의 `HashCode` 값이 다르기 때문에 `map`에서 검색할 때, `NPE`가 발생한 것이다.
 
 즉, `hashCode`를 재정의하지 않았기 때문에,
 논리적 동치인 두 객체가 서로 다른 해시코드를 반환하여, 두 번째 규약을 지키지 못한 것이다.
@@ -110,8 +200,7 @@ public class Contact {
 위 코드는 논리적으로 같은 객체는 같은 해시코드를 반환하게 했지만, 논리적으로 같지 않은 객체도 반환하게 된다.
 
 `Contact`의 모든 인스턴스가 동일한 값만 내어주기 때문에 해시 테이블의 버킷 하나에 담겨 마치 연결 리스트처럼 동작하게 된다.
-그 결과 평균 수행 시간이 `O(1)`인 해시 테이블이 `O(n)`으로 느려져서,
-객체가 많아지면 도저히 쓸 수 없게 된다.
+그 결과 평균 수행 시간이 `O(1)`인 해시 테이블이 `O(n)`으로 느려져서, 객체가 많아지면 도저히 쓸 수 없게 된다.
 
 ## hashCode 작성 요령
 
