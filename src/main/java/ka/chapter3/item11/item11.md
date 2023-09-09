@@ -19,7 +19,7 @@ System.out.println(contact);
 
 가장 뒤에 나오는 `51114e`라는 `hash` 값은 실제 주소값과 관련이 있을까?
 
-### C Lang
+### Clang
 
 C언어 계열은 `*p`, `malloc`, `free` 등과 같은 메소드를 활용한다.
 
@@ -74,10 +74,19 @@ identity : 1434041222
 VM hash : 30320045384
 ```
 
-이마저도 실제 메모리 주소를 [압축한 값](https://shipilev.net/jvm/anatomy-quarks/23-compressed-references/#_compressed_references)일 수 있기 때문에 실제로 사용하지 않는 것이 좋다.
+이와 같은 값을 내는 이유는 객체의 참조에 보통 많은 값을 담아 무겁기 때문에 [압축 참조](https://shipilev.net/jvm/anatomy-quarks/23-compressed-references/#_compressed_references)를 하기 때문이다.
 
-이와 같이 `Java`와 같은 경우에는 메모리 관리를 사용자가 하는 것이 아닌 `GC`가 직접 처리한다.
-때문에 `hashCode`를 이용해 실제 객체 메모리 값을 추상화하고, 압축한다.
+> Java objects are usually quite reference-heavy, and there is pressure for runtimes to employ the optimizations that make the references smaller.
+> The most ubiquitous trick is to compress the references: make their representation smaller than the machine pointer width.
+
+> Java 객체는 일반적으로 참조가 상당히 크기 때문에 참조를 더 작게 만드는 최적화를 실행해야 하는 부담이 있습니다.
+> 가장 보편적인 방법은 참조를 압축하는 것입니다. 
+> 참조를 기계 포인터 폭보다 작게 표현하는 것입니다.
+
+즉, `Java`에서 볼 수 있는 `hashCode` 값들은 모두 실제 메모리 값을 압축한 값이다.
+
+`Java`와 같은 경우에는 메모리 관리를 사용자가 하는 것이 아닌,
+`GC`가 직접 처리하기 때문에 `hashCode`를 이용해 실제 객체 메모리 값을 추상화하고, 압축한다.
 
 C언어는 실제 메모리를 사용하기 때문에 안전성이 낮지만,
 `Java`의 경우 직접적인 메모리를 노출시키지 않아, 안전성을 높일 수 있다.
