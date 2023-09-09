@@ -304,14 +304,15 @@ public class Contact {
 
     @Override
     public int hashCode() {
-        int c = Arrays.hashCode(nickname);
-        int result = Objects.hashCode(middle);
-        result = 31 * result + c;
-
-        return result;
+        int result = Integer.hashCode(middle);
+        result = 31 * result + (member != null ? member.hashCode() : 0);
+        result = 31 * result + Arrays.hashCode(nickname);
+        ...
     }
 }
 ```
+
+모든 핵심 필드에 대해서 위와 같은 과정을 반복해주면 된다. 
 
 ### 3. 자문
 
@@ -347,6 +348,13 @@ public class Contact {
 ```
 
 이렇게 곱셈을 구현하는 이유는 비슷한 필드가 여러 개일 때, 해시 효과를 크게 높여주기 때문이다.
+
+실제로 DB에 중요 데이터를 저장할 때, 솔트, 페퍼를 뿌리는 느낌인 것 같다.
+
+> 솔트란, 비밀번호와 같은 데이터를 암호화하는 과정에서 가장 앞에 특정 숫자 혹은 문자열을 추가해 암호화하는 것
+
+![image](https://github.com/Jwhyee/effective-java-study/assets/82663161/eafbe8c7-a273-49b4-941a-39a1a80757c7)
+
 만약, `String`의 `hashCode`를 곱셈 없이 구현한다면, 모든 아나그램의 해시코드가 같아질 수 있다.
 
 ## 해시코드 팁
@@ -357,17 +365,19 @@ public class Contact {
 해시 충돌을 더욱 적은 방법을 사용하고 싶다면 `com.google.common.hash.Hashing`을 사용하면 된다.
 
 ```java
-@Override
-public int hashCode() {
-    HashFunction hashFunction = Hashing.sha256();
-    HashCode hashCode = hashFunction.newHasher()
-            .putInt(countryCode)
-            .putInt(middle)
-            .putInt(middle)
-            .putInt(suffix)
-            .putObject(member)
-            .hash();
-    return hashCode.asInt();
+public class Contact {
+    @Override
+    public int hashCode() {
+        HashFunction hashFunction = Hashing.sha256();
+        HashCode hashCode = hashFunction.newHasher()
+                .putInt(countryCode)
+                .putInt(middle)
+                .putInt(middle)
+                .putInt(suffix)
+                .putObject(member)
+                .hash();
+        return hashCode.asInt();
+    }
 }
 ```
 
