@@ -12,6 +12,7 @@ public class CloneTest {
     void objectCloneTest() {
         try {
             Method objectCloneMethod = Object.class.getDeclaredMethod("clone");
+            objectCloneMethod.setAccessible(true);
 
             Object originalObject = new Object();
             Object cloneObject = objectCloneMethod.invoke(originalObject);

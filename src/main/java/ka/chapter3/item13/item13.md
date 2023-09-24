@@ -12,8 +12,10 @@ public class Object {
 }
 ```
 
-`clone()` 메소드는 코드와 같이 `protected`이고, `native`가 붙어있다.
-이를 리플렉션을 접근할 경우 `IllegalAccessException` 에러가 발생한다.
+`@IntrinsicCandidate`란, 구현을 JVM 상에서 해주는 부분을 명시하는 어노테이션이다.
+즉, JVM 종류에 따라 구현이 달라지게 되고, `native` 키워드도 있기 때문에 자바가 아닌 타언어로 구현된다는 것이다.
+
+만약 이 `clone` 메소드를 리플렉션을 통해 접근할 경우 `IllegalAccessException` 에러가 발생한다.
 
 ```java
 public class CloneTest {
@@ -21,6 +23,7 @@ public class CloneTest {
     void objectCloneTest() {
         try {
             Method objectCloneMethod = Object.class.getDeclaredMethod("clone");
+            // objectCloneMethod.setAccessible(true);
 
             Object originalObject = new Object();
             Object cloneObject = objectCloneMethod.invoke(originalObject);
@@ -41,7 +44,7 @@ java.lang.IllegalAccessException: class ka.chapter3.item13.clone.CloneTest canno
 ```
 
 에러 로그를 살펴보면, '`protected native`가 붙은 멤버에 액세스할 수 없다.'라고 나와있다.
-즉, 여차저차 접근까지는 할 수 있어도, 실제로 사용까지는 할 수 없는 형태인 것이다.
+즉, `Object` 클래스의 `clone` 메소드를 리플렉션을 통해 호출하려고 하면, `protected`라는 접근 제한이 있어 접근할 수 없다는 것이다.
 
 이러한 문제점 때문에 `Cloneable` 방식이 널리 사용되고 있다.
 
@@ -104,7 +107,7 @@ x.clone().equals(x)
 아래 코드와 같이 일반 생성자를 통해 반환해도 컴파일러는 이 규약을 지켰는지 알 수 없다는 것이다.
 
 ```java
-public class Member implements Cloneable{
+public class Member implements Cloneable {
     int id;
     String name;
 
@@ -168,6 +171,9 @@ public class Member implements Cloneable {
 ```
 
 자바가 공변 반환 타이핑(covariant return typing)을 지원하니 `Member`로 반환하는 것이 가능하고, 권장하는 방식이다.
+
+> 공변 반환 타이핑이란, 상위 클래스에 정위된 메소드를 하위 클래스에서 오버라이딩할 때,
+> 상위 클래스에 정의된 반환 타입을 하위 클래스의 타입으로 변경할 수 있는 것.
 
 여기서 `super.clone`을 `try-catch` 블록으로 감싼 이유는, `Object`의 `clone` 메소드가 검사 예외를 던지기 때문이다.
 
@@ -253,7 +259,7 @@ public class StackTest {
 
 여기서 NPE가 뜨는 이유는 바로 `size` 때문이다.
 
-`originalStack`에 총 3개의 데이터를 넣었기 때문에 size의 값은 3이다.
+`originalStack`에 총 3개의 데이터를 넣었기 때문에 `size`의 값은 3이다.
 하지만, 이에 대한 복제본인 `cloneStack`이 생겼고, `pop()`을 진행했다.
 
 위 상황에서 `cloneStack`이 갖고 있는 배열은 `originalStack.elements` 배열을 참조하기 때문에 원본 스택의 값도 하나 없어진 것과 마찬가지다.
