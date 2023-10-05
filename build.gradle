@@ -12,12 +12,12 @@ repositories {
 dependencies {
     implementation 'org.junit.jupiter:junit-jupiter:5.8.1'
     implementation 'org.projectlombok:lombok:1.18.26'
+    implementation 'org.assertj:assertj-core:3.24.2'
     compileOnly         "com.google.auto.value:auto-value-annotations:1.6"
     annotationProcessor "com.google.auto.value:auto-value:1.6"
     implementation 'com.google.guava:guava:30.1-jre'
     compileOnly 'org.projectlombok:lombok'
-    testImplementation platform('org.junit:junit-bom:5.9.1')
-    testImplementation 'org.junit.jupiter:junit-jupiter'
+    testImplementation 'org.assertj:assertj-core:3.24.2'
 }
 
 test {
