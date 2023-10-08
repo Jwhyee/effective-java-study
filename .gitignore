@@ -6,6 +6,7 @@ build/
 
 out/
 .idea/
+src/main/generated
 
 ### IntelliJ IDEA ###
 .idea/modules.xml
