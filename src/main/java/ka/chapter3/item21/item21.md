@@ -58,7 +58,7 @@ public class CalcTest {
 
 ```java
 public interface Collection {
-    default boolena removeIf(Predicate<? super E> filter) {
+    default boolean removeIf(Predicate<? super E> filter) {
         Objects.requireNonNull(filter);
         boolean result = false;
         for(Iterator<E> it = iterator(); it.hasNext();) {
@@ -73,6 +73,7 @@ public interface Collection {
 ```
 
 `Iterator`를 돌면서 주어진 `Predicate`가 `true`를 반환하면 반복자의 `remove` 메소드를 호출해 그 원소를 제거한다.
+Java8 `Collection`에 추가된 `removeIf`는 현존하는 모든 `Collection` 구현체와 잘 어우러지는 것은 아니다. 
 
 아파치의 `SynchronizedColletion` 클래스는 모든 메소드에서 주어진 락 객체로 동기화한 후 내부 컬렉션 객체에 기능을 위임하는 래퍼 클래스이다.
 지금도 활발히 관리되고 있지만, `removeIf` 메소드를 재정의하고 있지 않다.
