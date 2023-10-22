@@ -23,8 +23,19 @@ public interface PhysicalConstants {
 
 클래스 내부에서 사용하는 상수는 외부 인터페이스가 아니라 내부 구현에 해당되기 때문에 상수 인터페이스 안티패턴은 인터페이스를 잘못 사용한 예이다.
 
+> 안티패턴이란, 비효율적이거나 비생산적인 패턴을 의미
+
 따라서 상수 인터페이스를 구현하는 것은 이 내부 구현을 클래스의 API로 노출하는 행위이다.
 `java.io.ObjectStreamConstant`와 같이 자바 플랫폼 라이브러리에도 상수 인터페이스가 몇 개 있으나, 인터페이스를 잘못 활용한 예이다.
+
+```java
+public interface ObjectStreamConstants {
+    static final short STREAM_MAGIC = (short) 0xaced;
+    static final short STREAM_VERSION = 5;
+    static final byte TC_BASE = 0x70;
+    ...
+}
+```
 
 특정 클래스나 인터페이스와 강하게 연관된 상수라면 그 클래스나 인터페이스 자체에 추가해야 한다.
 
