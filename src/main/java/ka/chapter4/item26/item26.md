@@ -57,8 +57,8 @@ public class StampTest {
     void stampTest() {
         Collection stamps = new ArrayList();
 
-        stamps.add(new Coin());
         stamps.add(new Stamp());
+        stamps.add(new Coin());
 
         for (Iterator i = stamps.iterator(); i.hasNext();) {
             Stamp s = (Stamp) i.next();
