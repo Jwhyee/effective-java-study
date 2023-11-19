@@ -55,6 +55,7 @@ public class StampTest {
     }
     @Test
     void stampTest() {
+        // Stamp 인스턴스만 취급한다.
         Collection stamps = new ArrayList();
 
         stamps.add(new Stamp());
@@ -80,7 +81,7 @@ Exception in thread "main" java.lang.ClassCastException ...
 여기서 주의해야할 점은 바로 컴파일타임이 아닌 런타임에서 에러를 발견하고 잡는다는 것이다.
 
 `Stamp 인스턴스만 취급한다.`라는 주석이 있어도 개발자가 그 외의 것을 넣어도 에러를 알아차릴 수 없다.
-이와 같이 로타입만을 사용하면 런타임에 문제를 겪는 코드와 원인ㅇ르 제공한 코드가 물리적으로 상당히 떨어져 있을 가능성이 커진다.
+이와 같이 로타입만을 사용하면 런타임에 문제를 겪는 코드와 원인을 제공한 코드가 물리적으로 상당히 떨어져 있을 가능성이 커진다.
 
 그렇기 때문에 제네릭을 사용해 다른 인스턴스를 추가할 경우 컴파일러가 경고를 내뱉도록 해야한다.
 
