@@ -104,11 +104,14 @@ Collection<Stamp> stamps = new ArrayList<>();
 그 과정에서 제네릭 없이 짠 코드가 이미 세상을 뒤 엎은 상태였고, 모든 코드를 수용하면서 제네릭을 사용하는 새로운 코드와도 맞물려 돌아가게 해야만 했다.
 
 
-#### List VS List<Object>
+#### 제네릭 대신 Object 클래스 사용
+
 
 `List`는 제네릭 타입에서 완전히 발을 뺀 것이고, `List<Object>`는 모든 타입을 허용한다는 의사를 컴파일러에게 명확히 전달한 것이다.
 
+
 `List<Object>` 같은 매개변수화 타입을 사용할 때와 달리 `List` 같은 로 타입을 사용하면 타입 안전성을 잃게 된다.
+
 
 ```java
 public class TestCode {
