@@ -105,14 +105,11 @@ Collection<Stamp> stamps = new ArrayList<>();
 
 ## 로 타입 예외
 
-### 제네릭 대신 Object 클래스 사용
-
+### 제네릭 VS Object
 
 `List`는 제네릭 타입에서 완전히 발을 뺀 것이고, `List<Object>`는 모든 타입을 허용한다는 의사를 컴파일러에게 명확히 전달한 것이다.
 
-
 `List<Object>` 같은 매개변수화 타입을 사용할 때와 달리 `List` 같은 로 타입을 사용하면 타입 안전성을 잃게 된다.
-
 
 ```java
 public class TestCode {
