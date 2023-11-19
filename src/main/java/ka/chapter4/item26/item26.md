@@ -40,6 +40,8 @@ ArrayList = new ArrayList();
 위 코드와 같이 `ArrayList`가 제네릭 타입이어도, 타입 정보 없이 객체를 생성할 수 있게 된다.
 이는, 제네릭이 도래하기 전 코드와 호환되도록 하기 위한 것이다.
 
+#### 단점
+
 ```java
 public class StampTest {
     static class Coin {
