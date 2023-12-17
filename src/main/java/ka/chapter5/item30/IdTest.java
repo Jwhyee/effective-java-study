@@ -3,6 +3,7 @@ package ka.chapter5.item30;
 import org.junit.jupiter.api.Test;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Objects;
 import java.util.function.UnaryOperator;
 
@@ -35,7 +36,7 @@ public class IdTest {
 
     }
 
-    public static <E extends Comparable<E>> E max(Collection<E> c) {
+    public static <E extends Comparable<E>> E max(List<E> c) {
         if(c.isEmpty()) throw new IllegalArgumentException("빈 컬렉션");
 
         E result = null;

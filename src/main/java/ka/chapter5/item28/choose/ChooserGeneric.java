@@ -9,7 +9,7 @@ import java.util.concurrent.ThreadLocalRandom;
 public class ChooserGeneric<T> {
     private final List<T> choiceList;
 
-    public ChooserGeneric(Collection<T> choices) {
+    public ChooserGeneric(Collection<? extends T> choices) {
         choiceList = new ArrayList<>(choices);
     }
 

@@ -45,4 +45,10 @@ public class ChooseTest {
         c = new Chooser(List.of("Hello", "World", "Java"));
         System.out.println(c.choose());
     }
+
+    @Test
+    void chooseGenericTest() {
+        List<Integer> list = new ArrayList<>();
+        ChooserGeneric<Number> cg = new ChooserGeneric<>(list);
+    }
 }
