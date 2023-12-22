@@ -9,11 +9,36 @@ import java.util.concurrent.ThreadLocalRandom;
 public class VarargsTest {
     @Test
     void argsTest() {
-        printArgs(1, 2, 3, 4, 5);
+//        printArgs(1, 2, 3, 4, 5);
+//
+//        printListArgs(List.of("Hello", "World"), List.of("olleH", "dlrow"));
+//
+//        pickTwo("좋은", "빠른", "저렴한");
+    }
 
-        printListArgs(List.of("Hello", "World"), List.of("olleH", "dlrow"));
+    @Test
+    void heapPollutionTest() {
+        // String 서브 타입의 ArrayList 선언
+        List<String> list1 = new ArrayList<>();
+        list1.add("홍길동");
+        list1.add("임꺽정");
 
-        pickTwo("좋은", "빠른", "저렴한");
+        // 최상위 타입으로써 다루기 위해 Object 타입으로 업 캐스팅
+        Object obj = list1;
+
+//        doSomething(obj);
+
+        // ArrayList로 되돌릴 때, String이 아닌 Double로 다운 캐스팅
+        // 소수값 리스트에 추가
+        List<Double> list2 = (List<Double>) obj;
+        list2.add(1.0);
+        list2.add(2.0);
+
+        System.out.println(list2); // [홍길동, 임꺾정, 1.0, 2.0]
+
+        for(double n : list2) {
+            System.out.println(n);
+        }
     }
 
     public void printArgs(int... args) {
