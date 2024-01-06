@@ -34,8 +34,8 @@ public class FavoritesTest {
     @Test
     @DisplayName("실체화 불가 타입 저장 테스트")
     void test2() {
-        f.putFavorite(List<String>.class, List.of("1", "2", "3"));
-//        f.putFavorite(List.class, List.of("1", "2", "3"));
+//        f.putFavorite(List<String>.class, List.of("1", "2", "3"));
+        f.putFavorite(List.class, List.of("1", "2", "3"));
         System.out.println(f.getFavorite(List.class));
     }
 
