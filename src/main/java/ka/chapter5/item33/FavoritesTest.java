@@ -25,6 +25,13 @@ public class FavoritesTest {
     }
 
     @Test
+    @DisplayName("이종 컨테이너를 사용하지 않은 테스트2")
+    void test4() {
+        f.putFavorite3("Integer의 인스턴스가 아닙니다.");
+        System.out.println(f.getFavorite(String.class));
+    }
+
+    @Test
     @DisplayName("악의적인 로 타입 인스턴스 테스트")
     void test1() {
         f.putFavorite((Class) Integer.class, "Integer의 인스턴스가 아닙니다.");

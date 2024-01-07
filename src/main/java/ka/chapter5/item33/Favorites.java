@@ -16,6 +16,10 @@ public class Favorites {
         db.put(Objects.requireNonNull(type.getClass()), instance);
     }
 
+    public <T> void putFavorite3(T instance) {
+        db.put(Objects.requireNonNull(instance.getClass()), instance);
+    }
+
     public <T> T getFavorite(Class<T> type) {
         return type.cast(db.get(type));
     }
