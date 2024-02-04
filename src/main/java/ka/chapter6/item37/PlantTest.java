@@ -7,7 +7,7 @@ import java.util.stream.Collectors;
 
 import static ka.chapter6.item37.Plant.LifeCycle.*;
 
-public class PlanetTest {
+public class PlantTest {
     static Plant[] garden = new Plant[4];
 
     public static void setGarden() {

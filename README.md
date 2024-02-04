@@ -6,13 +6,19 @@
           <thead>
               <tr>
                   <th><a href="https://github.com/Jwhyee">가준영</a></th>
+                  <th><a href="https://github.com/ndy2">남득윤</a></th>
+                  <th><a href="https://github.com/Shinminjin">신민진</a></th>
                   <th><a href="https://github.com/gs97ahn">안검성</a></th>
+                  <th><a href="https://github.com/d36choi">최상현</a></th>
               </tr>
           </thead>
           <tbody>
               <tr>
                   <td><img src="https://avatars.githubusercontent.com/u/82663161?v=4" width="120" height="120"/></td>
+                  <td><img src="https://avatars.githubusercontent.com/u/67302707?v=4" width="120" height="120"/></td>
+                  <td><img src="https://avatars.githubusercontent.com/u/76575966?v=4" width="120" height="120"/></td>
                   <td><img src="https://avatars.githubusercontent.com/u/84578465?v=4" width="120" height="120"/></td>
+                  <td><img src="https://avatars.githubusercontent.com/u/40600306?v=4" width="120" height="120"/></td>
               </tr>
           </tbody>
       </table>
